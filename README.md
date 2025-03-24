@@ -55,7 +55,7 @@ The project can be run locally by cloning the repository and opening index.html 
 
 ## Demo
 
-<!--Update with link to your deployed project - once it's live after first assessment has been received & necessary edits made.-->
+https://ruthlessrebekah.github.io/se_project_spots
 
 ## Screenshots
 
