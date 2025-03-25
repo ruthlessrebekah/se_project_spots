@@ -59,4 +59,10 @@ https://ruthlessrebekah.github.io/se_project_spots
 
 ## Screenshots
 
-<!--Update with screenshots of your project here after first assessment has been received & necessary edits made.-->
+![Desktop view](./images/spots-1440-view.PNG)
+![Tablet view](./images/spots-1024-view.PNG)
+![Mobile view](./images/spots-320-view.PNG)
+
+## Video
+
+https://drive.google.com/file/d/1bAH9n4QqNimWKpkwQvBED3TXHJWgC6zs/view?usp=sharing
