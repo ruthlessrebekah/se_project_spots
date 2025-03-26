@@ -65,4 +65,4 @@ https://ruthlessrebekah.github.io/se_project_spots
 
 ## Video
 
-https://drive.google.com/file/d/1bAH9n4QqNimWKpkwQvBED3TXHJWgC6zs/view?usp=sharing
+https://drive.google.com/file/d/11DFBf0nYyvh6G34_nhYO3PILlLnRPjNm/view?usp=sharing

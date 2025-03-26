@@ -58,6 +58,7 @@
 @media screen and (max-width: 320px) {
   .card__title {
     font-size: 16px;
+    max-width: 250px;
   }
   .card__like-btn {
     width: 20px;
