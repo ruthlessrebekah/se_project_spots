@@ -45,16 +45,6 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 627px) {
-  .card__image {
-    height: 288px;
-  }
-  .card__like-btn {
-    width: 20px;
-    height: 18px;
-  }
-}
-
 @media screen and (max-width: 320px) {
   .card__title {
     font-size: 16px;
