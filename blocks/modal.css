@@ -49,6 +49,10 @@
   border: none;
 }
 
+.modal__close-btn {
+  cursor: pointer;
+}
+
 .modal__title {
   margin: 0 0 32px;
   font-family: Poppins, Arial, Helvetica, sans-serif;
@@ -110,6 +114,10 @@
   border-radius: 8px;
   border: none;
   padding: 18px 32px;
+}
+
+.modal__submit-btn:hover {
+  cursor: pointer;
 }
 
 @media screen and (max-width: 850px) {
