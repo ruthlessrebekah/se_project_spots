@@ -52,8 +52,9 @@
   border: none;
 }
 
-.modal__close-btn {
+.modal__close-btn:hover {
   cursor: pointer;
+  opacity: 1;
 }
 
 .modal__title {
@@ -90,8 +91,7 @@
   line-height: 100%;
   letter-spacing: 0%;
   border-radius: 8px;
-  border: 1px solid #212121;
-  opacity: 0.4;
+  border: 1px solid rgba(33, 33, 33, 0.4);
   padding: 16px 12px;
   box-sizing: border-box;
 }
@@ -102,6 +102,7 @@
 
 .modal__input:hover {
   cursor: pointer;
+  border-color: #212121;
 }
 
 .modal__submit-btn {
@@ -121,6 +122,7 @@
 
 .modal__submit-btn:hover {
   cursor: pointer;
+  opacity: 0.8;
 }
 
 @media screen and (max-width: 850px) {

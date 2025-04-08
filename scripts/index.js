@@ -25,25 +25,20 @@ const initialCards = [
   },
 ]
 
-console.log(initialCards)
-
 const editProfileBtn = document.querySelector('.profile__edit-btn')
 const editProfileModal = document.querySelector('#edit-profile-modal')
 const editProfileCloseBtn = editProfileModal.querySelector('.modal__close-btn')
-const editProfileForm = editProfileModal.querySelector('.modal__form')
-const editProfileNameInput = editProfileModal.querySelector(
-  '#profile-name-input',
-)
-const editProfileDescriptionInput = editProfileModal.querySelector(
-  '#profile-description-input',
-)
+const editProfileForm = document.forms['edit-profile-form']
+const editProfileNameInput = editProfileForm.elements['profile-name']
+const editProfileDescriptionInput =
+  editProfileForm.elements['profile-description']
 
 const newPostBtn = document.querySelector('.profile__add-btn')
 const newPostModal = document.querySelector('#new-post-modal')
 const newPostCloseBtn = newPostModal.querySelector('.modal__close-btn')
 const newPostForm = newPostModal.querySelector('.modal__form')
-const newPostImageInput = newPostModal.querySelector('#card-image-input')
-const newPostCaptionInput = newPostModal.querySelector('#caption-input')
+const newPostImageInput = newPostForm.elements['card-image']
+const newPostCaptionInput = newPostForm.elements['caption']
 
 const profileNameEl = document.querySelector('.profile__name')
 const profileDescriptionEl = document.querySelector('.profile__description')
@@ -69,12 +64,16 @@ newPostCloseBtn.addEventListener('click', function () {
 
 function handleEditProfileSubmit(evt) {
   evt.preventDefault()
-  profileNameEl.textContent = editProfileNameInput.value
-  profileDescriptionEl.textContent = editProfileDescriptionInput.value
+
+  const formData = {
+    nameValue: editProfileNameInput.value,
+    descriptionValue: editProfileDescriptionInput.value,
+  }
+
+  profileNameEl.textContent = formData.nameValue
+  profileDescriptionEl.textContent = formData.descriptionValue
   editProfileModal.classList.remove('modal_is-opened')
 }
-
-editProfileForm.addEventListener('submit', handleEditProfileSubmit)
 
 function handleNewPostSubmit(evt) {
   evt.preventDefault()
@@ -83,4 +82,5 @@ function handleNewPostSubmit(evt) {
   newPostModal.classList.remove('modal_is-opened')
 }
 
-newPostModal.addEventListener('submit', handleNewPostSubmit)
+newPostForm.addEventListener('submit', handleNewPostSubmit)
+editProfileForm.addEventListener('submit', handleEditProfileSubmit)
