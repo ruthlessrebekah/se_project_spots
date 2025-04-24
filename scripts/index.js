@@ -40,7 +40,7 @@ const editProfileDescriptionInput =
 const newPostBtn = document.querySelector('.profile__add-btn')
 const newPostModal = document.querySelector('#new-post-modal')
 const newPostCloseBtn = newPostModal.querySelector('.modal__close-btn')
-const newPostForm = newPostModal.querySelector('.modal__form')
+const newPostForm = document.forms['new-post-form']
 const newPostImageInput = newPostForm.elements['card-image']
 const newPostCaptionInput = newPostForm.elements['caption']
 
@@ -57,34 +57,41 @@ const cardTemplate = document
   .content.querySelector('.card')
 const cardsList = document.querySelector('.cards__list')
 
-function getCardElement(data) {
-  const cardElement = cardTemplate.cloneNode(true)
-  const cardTitleEl = cardElement.querySelector('.card__title')
-  const cardImageEl = cardElement.querySelector('.card__image')
+function getCardEl(data) {
+  const cardEl = cardTemplate.cloneNode(true)
+  const cardTitleEl = cardEl.querySelector('.card__title')
+  const cardImageEl = cardEl.querySelector('.card__image')
 
   cardImageEl.src = data.link
   cardImageEl.alt = data.name
   cardTitleEl.textContent = data.name
 
-  const cardLikeBtnEl = cardElement.querySelector('.card__like-btn')
-  cardLikeBtnEl.addEventListener('click', () => {
+  const cardLikeBtnEl = cardEl.querySelector('.card__like-btn')
+  function handleLikeButtonClick() {
     cardLikeBtnEl.classList.toggle('card__like-btn_active')
-  })
+  }
 
-  const cardDeleteBtnEl = cardElement.querySelector('.card__delete-btn')
-  cardDeleteBtnEl.addEventListener('click', () => {
-    cardElement.remove()
-    cardElement = null
-  })
+  cardLikeBtnEl.addEventListener('click', handleLikeButtonClick)
 
-  cardImageEl.addEventListener('click', () => {
-    previewImageEl.src = data.link
-    previewImageEl.alt = data.name
-    previewCaptionEl.textContent = data.name
-    openModal(previewModal)
-  })
+  const cardDeleteBtnEl = cardEl.querySelector('.card__delete-btn')
+  function handleCardDeleteClick() {
+    cardEl.remove()
+  }
 
-  return cardElement
+  cardDeleteBtnEl.addEventListener('click', handleCardDeleteClick)
+
+  function createHandlePreviewModalOpen(data) {
+    return function handlePreviewModalOpen() {
+      previewImageEl.src = data.link
+      previewImageEl.alt = data.name
+      previewCaptionEl.textContent = data.name
+      openModal(previewModal)
+    }
+  }
+
+  cardImageEl.addEventListener('click', createHandlePreviewModalOpen(data))
+
+  return cardEl
 }
 
 function openModal(modal) {
@@ -95,39 +102,50 @@ function closeModal(modal) {
   modal.classList.remove('modal_is-opened')
 }
 
-editProfileBtn.addEventListener('click', function () {
+function handleProfileEditClick() {
   editProfileNameInput.value = profileNameEl.textContent
   editProfileDescriptionInput.value = profileDescriptionEl.textContent
   openModal(editProfileModal)
-})
+}
 
-editProfileCloseBtn.addEventListener('click', function () {
+editProfileBtn.addEventListener('click', handleProfileEditClick)
+
+function handleProfileModalClose() {
   closeModal(editProfileModal)
-})
+}
 
-previewModalCloseBtn.addEventListener('click', function () {
+editProfileCloseBtn.addEventListener('click', handleProfileModalClose)
+
+function handlePreviewModalClose() {
   closeModal(previewModal)
-})
+}
 
-newPostBtn.addEventListener('click', function () {
+previewModalCloseBtn.addEventListener('click', handlePreviewModalClose)
+
+function handlePostModalOpen() {
   openModal(newPostModal)
-})
+}
 
-newPostCloseBtn.addEventListener('click', function () {
+newPostBtn.addEventListener('click', handlePostModalOpen)
+
+function handlePostModalClose() {
   closeModal(newPostModal)
-})
+}
+
+newPostCloseBtn.addEventListener('click', handlePostModalClose)
 
 function handleEditProfileSubmit(evt) {
   evt.preventDefault()
 
-  const formData = {
+  const inputValues = {
     nameValue: editProfileNameInput.value,
     descriptionValue: editProfileDescriptionInput.value,
   }
 
-  profileNameEl.textContent = formData.nameValue
-  profileDescriptionEl.textContent = formData.descriptionValue
-  editProfileModal.classList.remove('modal_is-opened')
+  profileNameEl.textContent = inputValues.nameValue
+  profileDescriptionEl.textContent = inputValues.descriptionValue
+  closeModal(editProfileModal)
+  editProfileForm.reset()
 }
 
 function handleNewPostSubmit(evt) {
@@ -138,16 +156,17 @@ function handleNewPostSubmit(evt) {
     link: newPostImageInput.value,
   }
 
-  const cardElement = getCardElement(inputValues)
-  cardsList.prepend(cardElement)
+  const cardEl = getCardEl(inputValues)
+  cardsList.prepend(cardEl)
 
-  newPostModal.classList.remove('modal_is-opened')
+  closeModal(newPostModal)
+  newPostForm.reset()
 }
 
 newPostForm.addEventListener('submit', handleNewPostSubmit)
 editProfileForm.addEventListener('submit', handleEditProfileSubmit)
 
-initialCards.forEach(function (item) {
-  const cardElement = getCardElement(item)
-  cardsList.append(cardElement)
+initialCards.forEach(function renderCard(item) {
+  const cardEl = getCardEl(item)
+  cardsList.append(cardEl)
 })

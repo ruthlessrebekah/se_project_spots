@@ -121,7 +121,7 @@
 }
 
 .modal__submit-btn {
-  max-width: 156px;
+  width: 156px;
   height: 52px;
   font-family: Poppins, Arial, Helvetica, sans-serif;
   font-weight: 500;
