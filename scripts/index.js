@@ -1,3 +1,10 @@
+import {
+  settings,
+  toggleButtonState,
+  resetValidation,
+  enableValidation,
+} from './validation.js'
+
 const initialCards = [
   {
     name: 'Golden Gate Bridge',
@@ -31,6 +38,7 @@ const initialCards = [
 
 const editProfileBtn = document.querySelector('.profile__edit-btn')
 const editProfileModal = document.querySelector('#edit-profile-modal')
+const newPostModal = document.querySelector('#new-post-modal')
 const editProfileCloseBtn = editProfileModal.querySelector('.modal__close-btn')
 const editProfileForm = document.forms['edit-profile-form']
 const editProfileNameInput = editProfileForm.elements['profile-name']
@@ -38,7 +46,6 @@ const editProfileDescriptionInput =
   editProfileForm.elements['profile-description']
 
 const newPostBtn = document.querySelector('.profile__add-btn')
-const newPostModal = document.querySelector('#new-post-modal')
 const newPostCloseBtn = newPostModal.querySelector('.modal__close-btn')
 const newPostForm = document.forms['new-post-form']
 const newPostImageInput = newPostForm.elements['card-image']
@@ -56,6 +63,33 @@ const cardTemplate = document
   .querySelector('#card-template')
   .content.querySelector('.card')
 const cardsList = document.querySelector('.cards__list')
+
+function updateProfileContent() {
+  const inputValues = {
+    nameValue: editProfileNameInput.value,
+    descriptionValue: editProfileDescriptionInput.value,
+  }
+  profileNameEl.textContent = inputValues.nameValue
+  profileDescriptionEl.textContent = inputValues.descriptionValue
+}
+
+function resetProfileForm() {
+  editProfileForm.reset()
+  const inputList = Array.from(
+    editProfileForm.querySelectorAll(settings.inputSelector),
+  )
+  const buttonElement = editProfileForm.querySelector(
+    settings.submitButtonSelector,
+  )
+  toggleButtonState(inputList, buttonElement, settings)
+}
+
+function handleEditProfileSubmit(evt) {
+  evt.preventDefault()
+  updateProfileContent()
+  resetProfileForm()
+  closeModal(editProfileModal)
+}
 
 function getCardEl(data) {
   const cardEl = cardTemplate.cloneNode(true)
@@ -96,15 +130,37 @@ function getCardEl(data) {
 
 function openModal(modal) {
   modal.classList.add('modal_is-opened')
+  document.addEventListener('keydown', handleEscClose)
 }
 
 function closeModal(modal) {
   modal.classList.remove('modal_is-opened')
+  document.removeEventListener('keydown', handleEscClose)
+}
+
+function closeModalOnOverlayClick(evt) {
+  if (evt.target.classList.contains('modal')) {
+    closeModal(evt.target)
+  }
+}
+
+function handleEscClose(evt) {
+  if (evt.key === 'Escape') {
+    const openedModal = document.querySelector('.modal_is-opened')
+    if (openedModal) {
+      closeModal(openedModal)
+    }
+  }
 }
 
 function handleProfileEditClick() {
   editProfileNameInput.value = profileNameEl.textContent
   editProfileDescriptionInput.value = profileDescriptionEl.textContent
+  resetValidation(
+    editProfileForm,
+    [editProfileNameInput, editProfileDescriptionInput],
+    settings,
+  )
   openModal(editProfileModal)
 }
 
@@ -123,6 +179,11 @@ function handlePreviewModalClose() {
 previewModalCloseBtn.addEventListener('click', handlePreviewModalClose)
 
 function handlePostModalOpen() {
+  resetValidation(
+    newPostForm,
+    Array.from(newPostForm.querySelectorAll(settings.inputSelector)),
+    settings,
+  )
   openModal(newPostModal)
 }
 
@@ -134,39 +195,43 @@ function handlePostModalClose() {
 
 newPostCloseBtn.addEventListener('click', handlePostModalClose)
 
-function handleEditProfileSubmit(evt) {
-  evt.preventDefault()
+editProfileModal.addEventListener('mousedown', closeModalOnOverlayClick)
+newPostModal.addEventListener('mousedown', closeModalOnOverlayClick)
+previewModal.addEventListener('mousedown', closeModalOnOverlayClick)
 
-  const inputValues = {
-    nameValue: editProfileNameInput.value,
-    descriptionValue: editProfileDescriptionInput.value,
+function getNewPostValues() {
+  return {
+    name: newPostCaptionInput.value,
+    link: newPostImageInput.value,
   }
+}
 
-  profileNameEl.textContent = inputValues.nameValue
-  profileDescriptionEl.textContent = inputValues.descriptionValue
-  closeModal(editProfileModal)
-  editProfileForm.reset()
+function resetNewPostForm() {
+  newPostForm.reset()
+  const inputList = Array.from(
+    newPostForm.querySelectorAll(settings.inputSelector),
+  )
+  const buttonElement = newPostForm.querySelector(settings.submitButtonSelector)
+  toggleButtonState(inputList, buttonElement, settings)
 }
 
 function handleNewPostSubmit(evt) {
   evt.preventDefault()
-
-  const inputValues = {
-    name: newPostCaptionInput.value,
-    link: newPostImageInput.value,
-  }
-
+  const inputValues = getNewPostValues()
   const cardEl = getCardEl(inputValues)
   cardsList.prepend(cardEl)
-
+  resetNewPostForm()
   closeModal(newPostModal)
-  newPostForm.reset()
 }
 
 newPostForm.addEventListener('submit', handleNewPostSubmit)
 editProfileForm.addEventListener('submit', handleEditProfileSubmit)
 
-initialCards.forEach(function renderCard(item) {
+function renderCard(item) {
   const cardEl = getCardEl(item)
   cardsList.append(cardEl)
-})
+}
+
+initialCards.forEach(renderCard)
+
+enableValidation(settings)

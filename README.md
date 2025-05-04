@@ -49,6 +49,32 @@ The project follows BEM methodology with the following structure:
 - Add photo upload capability
 - Create user authentication
 
+Recent Updates (Date: [05/03/2025])
+
+#### Form Validation Implementation
+
+- Core Functionality
+  - Added comprehensive form validation system (validation.js)
+  - Implemented real-time input validation with visual feedback
+  - Created dynamic error message display
+  - Added submit button state management based on form validity
+
+#### Modal System Enhancements
+
+- Interaction Improvements
+  - Added ESC key support for closing modals
+  - Implemented overlay click detection
+  - Enhanced event listener cleanup
+  - Added form reset functionality on modal close
+
+#### Code Quality Updates
+
+- Structure and Organization
+  - Created centralized settings object for validation configuration
+  - Implemented modular validation functions
+  - Added utility functions for error handling
+  - Enhanced code maintainability
+
 ## Running the Project
 
 The project can be run locally by cloning the repository and opening index.html in a web browser.
@@ -66,101 +92,3 @@ https://ruthlessrebekah.github.io/se_project_spots
 ## Video
 
 https://drive.google.com/file/d/11DFBf0nYyvh6G34_nhYO3PILlLnRPjNm/view?usp=sharing
-
-## Recent Updates
-
-### Code Improvements
-
-1. **Form Handling Enhancement**
-
-   - Standardized variable naming from 'formData' to 'inputValues' across all form handling functions
-   - Added form reset functionality after submission using the `reset()` method
-
-2. **Modal Management**
-
-   - Implemented centralized modal management functions (`openModal()` and `closeModal()`)
-   - Replaced direct classList manipulation with reusable modal functions
-   - Enhanced code maintainability and reduced redundancy
-
-3. **Code Organization**
-   - Improved code structure and readability
-   - Maintained consistent naming conventions throughout the codebase
-
-# Project Changelog
-
-## Core Features Implemented
-
-### Card Management System
-
-1. **Dynamic Card Generation**
-
-   - Implemented template-based card generation system
-   - Created `getCardEl()` function for card element creation
-   - Successfully generating initial cards from `initialCards` array
-
-2. **Card Interactions**
-   - Added like button functionality with toggle effect
-   - Implemented card deletion feature
-   - Created preview modal for card images
-   - Cards are properly ordered (new cards prepend to list)
-
-### Modal System
-
-1. **Modal Architecture**
-
-   - Implemented centralized modal management with `openModal()` and `closeModal()`
-   - Added smooth transitions for modal opening/closing
-   - Created reusable modal functions to reduce code duplication
-
-2. **Form Handling**
-   - Standardized form data handling using consistent variable naming (`inputValues`)
-   - Added form reset functionality after submission
-   - Implemented proper form submission prevention
-
-### Profile Management
-
-1. **Profile Editing**
-   - Added profile edit functionality
-   - Implemented auto-population of current values in edit form
-   - Added form validation and submission handling
-
-## Code Quality Improvements
-
-### JavaScript Optimizations
-
-1. **Variable Naming**
-
-   - Standardized naming conventions using camelCase
-   - Improved variable naming clarity and consistency
-   - Removed redundant variable declarations
-
-2. **Function Organization**
-   - Implemented modular function structure
-   - Created reusable utility functions
-   - Improved event handling organization
-
-### Best Practices
-
-1. **Code Structure**
-
-   - Maintained proper DOM manipulation practices
-   - Implemented event delegation where appropriate
-   - Added proper error prevention and handling
-
-2. **Performance**
-   - Optimized DOM operations
-   - Improved code reusability
-   - Enhanced maintainability through consistent patterns
-
-## UI/UX Enhancements
-
-1. **Modal Interactions**
-
-   - Smooth transitions for modal windows
-   - Improved form feedback
-   - Enhanced user experience with clear interaction patterns
-
-2. **Responsive Design**
-   - Ensured proper layout at all breakpoints
-   - Maintained consistent styling across devices
-   - Implemented proper mobile responsiveness
