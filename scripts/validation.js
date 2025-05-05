@@ -73,4 +73,3 @@ const enableValidation = (settings) => {
 }
 
 enableValidation(settings)
-export { toggleButtonState, resetValidation, settings }

@@ -1,10 +1,3 @@
-import {
-  settings,
-  toggleButtonState,
-  resetValidation,
-  enableValidation,
-} from './validation.js'
-
 const initialCards = [
   {
     name: 'Golden Gate Bridge',
@@ -233,5 +226,3 @@ function renderCard(item) {
 }
 
 initialCards.forEach(renderCard)
-
-enableValidation(settings)
