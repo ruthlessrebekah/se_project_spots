@@ -159,38 +159,21 @@ function handleProfileEditClick() {
 
 editProfileBtn.addEventListener('click', handleProfileEditClick)
 
-function handleProfileModalClose() {
-  closeModal(editProfileModal)
-}
-
-editProfileCloseBtn.addEventListener('click', handleProfileModalClose)
-
-function handlePreviewModalClose() {
-  closeModal(previewModal)
-}
-
-previewModalCloseBtn.addEventListener('click', handlePreviewModalClose)
-
 function handlePostModalOpen() {
-  resetValidation(
-    newPostForm,
-    Array.from(newPostForm.querySelectorAll(settings.inputSelector)),
-    settings,
-  )
   openModal(newPostModal)
 }
 
 newPostBtn.addEventListener('click', handlePostModalOpen)
 
-function handlePostModalClose() {
-  closeModal(newPostModal)
-}
-
-newPostCloseBtn.addEventListener('click', handlePostModalClose)
-
 editProfileModal.addEventListener('mousedown', closeModalOnOverlayClick)
 newPostModal.addEventListener('mousedown', closeModalOnOverlayClick)
 previewModal.addEventListener('mousedown', closeModalOnOverlayClick)
+
+const closeButtons = document.querySelectorAll('.modal__close-btn')
+closeButtons.forEach((button) => {
+  const modal = button.closest('.modal')
+  button.addEventListener('click', () => closeModal(modal))
+})
 
 function getNewPostValues() {
   return {

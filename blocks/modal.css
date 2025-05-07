@@ -152,7 +152,7 @@
   padding: 18px 32px;
 }
 
-.modal__button_disabled {
+.modal__submit-btn_disabled {
   opacity: 0.5;
   pointer-events: none;
 }
