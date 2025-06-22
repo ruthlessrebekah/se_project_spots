@@ -49,7 +49,22 @@ The project follows BEM methodology with the following structure:
 - Add photo upload capability
 - Create user authentication
 
-Recent Updates (Date: [05/03/2025])
+## Recent Updates
+
+### 2025-06-15
+- Integrated webpack for asset bundling (images, fonts, CSS, JS)
+- Updated webpack config to support asset/resource for images and fonts
+- Refactored image/font imports in JS and CSS for compatibility with webpack
+- Fixed 404 errors for static assets in dev server
+- Improved project structure for build output
+
+### 2025-06-16
+- Debugged and resolved issues with image/font loading in webpack build
+- Updated documentation for asset management
+- Added update notes to README
+- General code cleanup and minor bug fixes
+
+### 2025-05-03
 
 #### Form Validation Implementation
 

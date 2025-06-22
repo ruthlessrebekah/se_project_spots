@@ -1,33 +1,46 @@
-import { enableValidation, settings } from './validation.js'
+import {
+  enableValidation,
+  settings,
+  resetValidation,
+  toggleButtonState,
+} from '../scripts/validation.js'
+import './index.css'
+import goldenGateBridgeImage from '../images/7-photo-by-griffin-wooldridge-from-pexels.jpg'
+import valThorensImage from '../images/1-photo-by-moritz-feldmann-from-pexels.jpg'
+import restaurantTerraceImage from '../images/2-photo-by-ceiline-from-pexels.jpg'
+import anOutdoorCafeImage from '../images/3-photo-by-tubanur-dogan-from-pexels.jpg'
+import forestBridgeImage from '../images/4-photo-by-maurice-laschet-from-pexels.jpg'
+import tunnelImage from '../images/5-photo-by-van-anh-nguyen-from-pexels.jpg'
+import mountainHouseImage from '../images/6-photo-by-moritz-feldmann-from-pexels.jpg'
 
 const initialCards = [
   {
     name: 'Golden Gate Bridge',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/7-photo-by-griffin-wooldridge-from-pexels.jpg',
+    image: goldenGateBridgeImage,
   },
   {
     name: 'Val Thorens',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/1-photo-by-moritz-feldmann-from-pexels.jpg',
+    image: valThorensImage,
   },
   {
     name: 'Restaurant terrace',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/2-photo-by-ceiline-from-pexels.jpg',
+    image: restaurantTerraceImage,
   },
   {
     name: 'An outdoor cafe',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/3-photo-by-tubanur-dogan-from-pexels.jpg',
+    image: anOutdoorCafeImage,
   },
   {
     name: 'A very long bridge, over the forest and through the trees',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/4-photo-by-maurice-laschet-from-pexels.jpg',
+    image: forestBridgeImage,
   },
   {
     name: 'Tunnel with morning light',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/5-photo-by-van-anh-nguyen-from-pexels.jpg',
+    image: tunnelImage,
   },
   {
     name: 'Mountain house',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/6-photo-by-moritz-feldmann-from-pexels.jpg',
+    image: mountainHouseImage,
   },
 ]
 
@@ -91,7 +104,7 @@ function getCardEl(data) {
   const cardTitleEl = cardEl.querySelector('.card__title')
   const cardImageEl = cardEl.querySelector('.card__image')
 
-  cardImageEl.src = data.link
+  cardImageEl.src = data.image
   cardImageEl.alt = data.name
   cardTitleEl.textContent = data.name
 

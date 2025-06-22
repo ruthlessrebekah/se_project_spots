@@ -35,7 +35,7 @@ const hasInvalidInput = (inputList) => {
   })
 }
 
-const toggleButtonState = (inputList, buttonEl, settings) => {
+export const toggleButtonState = (inputList, buttonEl, settings) => {
   if (hasInvalidInput(inputList)) {
     buttonEl.disabled = true
     buttonEl.classList.add(settings.inactiveButtonClass)
@@ -45,7 +45,7 @@ const toggleButtonState = (inputList, buttonEl, settings) => {
   }
 }
 
-const resetValidation = (formEl, inputList, settings) => {
+export const resetValidation = (formEl, inputList, settings) => {
   inputList.forEach((input) => {
     hideInputError(formEl, input, settings)
   })
@@ -71,5 +71,3 @@ export const enableValidation = (settings) => {
     setEventListeners(formEl, settings)
   })
 }
-
-enableValidation(settings)
