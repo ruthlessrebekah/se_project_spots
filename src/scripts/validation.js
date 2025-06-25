@@ -40,6 +40,7 @@ export const toggleButtonState = (inputList, buttonEl, settings) => {
     buttonEl.disabled = true
     buttonEl.classList.add(settings.inactiveButtonClass)
   } else {
+    console.log(settings.submitButtonSelector)
     buttonEl.disabled = false
     buttonEl.classList.remove(settings.inactiveButtonClass)
   }
@@ -52,9 +53,15 @@ export const resetValidation = (formEl, inputList, settings) => {
 }
 
 const setEventListeners = (formEl, settings) => {
+  console.log('Processing form:', formEl) // Correct variable name
+  console.log(
+    'Looking for button with selector:',
+    settings.submitButtonSelector,
+  ) // Add this line
   const inputList = Array.from(formEl.querySelectorAll(settings.inputSelector))
   const buttonElement = formEl.querySelector(settings.submitButtonSelector)
 
+  console.log('Found button:', buttonElement) // Correct variable name
   toggleButtonState(inputList, buttonElement, settings)
 
   inputList.forEach((inputEl) => {

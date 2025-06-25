@@ -4,7 +4,9 @@ import {
   resetValidation,
   toggleButtonState,
 } from '../scripts/validation.js'
+import { setButtonText } from '../utils/helpers.js'
 import './index.css'
+import Api from '../utils/Api.js'
 import goldenGateBridgeImage from '../images/7-photo-by-griffin-wooldridge-from-pexels.jpg'
 import valThorensImage from '../images/1-photo-by-moritz-feldmann-from-pexels.jpg'
 import restaurantTerraceImage from '../images/2-photo-by-ceiline-from-pexels.jpg'
@@ -16,69 +18,114 @@ import mountainHouseImage from '../images/6-photo-by-moritz-feldmann-from-pexels
 const initialCards = [
   {
     name: 'Golden Gate Bridge',
-    image: goldenGateBridgeImage,
+    link: goldenGateBridgeImage,
   },
   {
     name: 'Val Thorens',
-    image: valThorensImage,
+    link: valThorensImage,
   },
   {
     name: 'Restaurant terrace',
-    image: restaurantTerraceImage,
+    link: restaurantTerraceImage,
   },
   {
     name: 'An outdoor cafe',
-    image: anOutdoorCafeImage,
+    link: anOutdoorCafeImage,
   },
   {
     name: 'A very long bridge, over the forest and through the trees',
-    image: forestBridgeImage,
+    link: forestBridgeImage,
   },
   {
     name: 'Tunnel with morning light',
-    image: tunnelImage,
+    link: tunnelImage,
   },
   {
     name: 'Mountain house',
-    image: mountainHouseImage,
+    link: mountainHouseImage,
   },
 ]
 
+const api = new Api({
+  baseUrl: 'https://around-api.en.tripleten-services.com/v1',
+  headers: {
+    authorization: '281d0863-c6ec-4780-a7d9-4358227ce389',
+    'Content-Type': 'application/json',
+  },
+})
+
+// Modal elements
 const editProfileBtn = document.querySelector('.profile__edit-btn')
 const editProfileModal = document.querySelector('#edit-profile-modal')
 const newPostModal = document.querySelector('#new-post-modal')
+const avatarModalBtn = document.querySelector('.profile__avatar-btn')
 const editProfileCloseBtn = editProfileModal.querySelector('.modal__close-btn')
 const editProfileForm = document.forms['edit-profile-form']
 const editProfileNameInput = editProfileForm.elements['profile-name']
 const editProfileDescriptionInput =
   editProfileForm.elements['profile-description']
 
+// New post form elements
 const newPostBtn = document.querySelector('.profile__add-btn')
 const newPostCloseBtn = newPostModal.querySelector('.modal__close-btn')
 const newPostForm = document.forms['new-post-form']
 const newPostImageInput = newPostForm.elements['card-image']
 const newPostCaptionInput = newPostForm.elements['caption']
 
+// Avatar form elements
+const avatarModal = document.querySelector('#avatar-modal')
+const avatarCloseBtn = avatarModal.querySelector('.modal__close-btn')
+const avatarForm = avatarModal.querySelector('.modal__form')
+const avatarInput = avatarModal.querySelector('#profile-avatar-input')
+
 const profileNameEl = document.querySelector('.profile__name')
 const profileDescriptionEl = document.querySelector('.profile__description')
 
+// Delete modal elements
+const deleteModal = document.querySelector('#delete-modal')
+const deleteForm = document.querySelector('#delete-form')
+const deleteCancelBtn = deleteForm.querySelector('.modal__button_cancel')
+
+// Preview image popup elements
 const previewModal = document.querySelector('#preview-modal')
 const previewModalCloseBtn = previewModal.querySelector('.modal__close-btn')
 const previewImageEl = previewModal.querySelector('.modal__image')
 const previewCaptionEl = previewModal.querySelector('.modal__caption')
+
+// Card related elements
+let selectedCard, selectedCardId
+let currentUser // Store user info globally for access in handlers
 
 const cardTemplate = document
   .querySelector('#card-template')
   .content.querySelector('.card')
 const cardsList = document.querySelector('.cards__list')
 
-function updateProfileContent() {
-  const inputValues = {
-    nameValue: editProfileNameInput.value,
-    descriptionValue: editProfileDescriptionInput.value,
-  }
-  profileNameEl.textContent = inputValues.nameValue
-  profileDescriptionEl.textContent = inputValues.descriptionValue
+api
+  .getAppInfo()
+  .then(([cards, userInfo]) => {
+    currentUser = userInfo // Set current user info after API call
+    cards.forEach((item) => {
+      const cardEl = getCardEl(item)
+      cardsList.append(cardEl)
+    })
+
+    const avatarImg = document.querySelector('.profile__avatar')
+    avatarImg.src = userInfo.avatar
+    profileNameEl.textContent = userInfo.name
+    profileDescriptionEl.textContent = userInfo.about
+
+    // If you want to render local cards too:
+    // initialCards.forEach((item) => {
+    //   const cardEl = getCardEl(item)
+    //   cardsList.append(cardEl)
+    // })
+  })
+  .catch(console.error)
+
+function updateProfileContent(data) {
+  profileNameEl.textContent = data.name
+  profileDescriptionEl.textContent = data.about
 }
 
 function resetProfileForm() {
@@ -94,9 +141,22 @@ function resetProfileForm() {
 
 function handleEditProfileSubmit(evt) {
   evt.preventDefault()
-  updateProfileContent()
-  resetProfileForm()
-  closeModal(editProfileModal)
+  const submitButton = evt.submitter
+  setButtonText(submitButton, true)
+  api
+    .editUserInfo({
+      name: editProfileNameInput.value,
+      about: editProfileDescriptionInput.value,
+    })
+    .then((data) => {
+      updateProfileContent(data)
+      resetProfileForm()
+      closeModal(editProfileModal)
+    })
+    .catch(console.error)
+    .finally(() => {
+      setButtonText(submitButton, false)
+    })
 }
 
 function getCardEl(data) {
@@ -104,23 +164,51 @@ function getCardEl(data) {
   const cardTitleEl = cardEl.querySelector('.card__title')
   const cardImageEl = cardEl.querySelector('.card__image')
 
-  cardImageEl.src = data.image
+  cardImageEl.src = data.link
   cardImageEl.alt = data.name
   cardTitleEl.textContent = data.name
 
   const cardLikeBtnEl = cardEl.querySelector('.card__like-btn')
-  function handleLikeButtonClick() {
-    cardLikeBtnEl.classList.toggle('card__like-btn_active')
+
+  // Set initial like button state based on whether the user has liked the card
+  if (data.isLiked) {
+    cardLikeBtnEl.classList.add('card__like-btn_active')
+  } else {
+    cardLikeBtnEl.classList.remove('card__like-btn_active')
+  }
+
+  function handleLikeButtonClick(evt) {
+    if (!currentUser) return // Prevent like/unlike if user info is not loaded
+    const isLiked = data.isLiked
+    api
+      .changeLikeStatus(data._id, isLiked)
+      .then((updatedCard) => {
+        data.isLiked = updatedCard.isLiked
+        // Update like count if element exists
+        // const likeCountEl = cardEl.querySelector('.card__like-count');
+        // if (likeCountEl) {
+        //   likeCountEl.textContent = updatedCard.likes.length;
+        if (isLiked) {
+          cardLikeBtnEl.classList.remove('card__like-btn_active')
+        } else {
+          cardLikeBtnEl.classList.add('card__like-btn_active')
+        }
+      })
+      .catch(console.error)
   }
 
   cardLikeBtnEl.addEventListener('click', handleLikeButtonClick)
 
   const cardDeleteBtnEl = cardEl.querySelector('.card__delete-btn')
-  function handleCardDeleteClick() {
-    cardEl.remove()
+  function handleCardDelete(cardEl, cardId) {
+    selectedCard = cardEl
+    selectedCardId = cardId
+    openModal(deleteModal)
   }
 
-  cardDeleteBtnEl.addEventListener('click', handleCardDeleteClick)
+  cardDeleteBtnEl.addEventListener('click', () =>
+    handleCardDelete(cardEl, data._id),
+  )
 
   function createHandlePreviewModalOpen(data) {
     return function handlePreviewModalOpen() {
@@ -135,6 +223,32 @@ function getCardEl(data) {
 
   return cardEl
 }
+
+function handleDeleteSubmit(evt) {
+  evt.preventDefault()
+  const submitButton = evt.submitter
+  setButtonText(submitButton, true, 'Delete', 'Deleting...')
+  api
+    .deleteCard(selectedCardId)
+    .then(() => {
+      selectedCard.remove()
+      selectedCard = null
+      selectedCardId = null
+      closeModal(deleteModal)
+    })
+    .catch(console.error)
+    .finally(() => {
+      setButtonText(submitButton, false, 'Delete', 'Deleting...')
+    })
+}
+
+deleteForm.addEventListener('submit', handleDeleteSubmit)
+
+deleteCancelBtn.addEventListener('click', function () {
+  selectedCard = null
+  selectedCardId = null
+  closeModal(deleteModal)
+})
 
 function openModal(modal) {
   modal.classList.add('modal_is-opened')
@@ -206,23 +320,63 @@ function resetNewPostForm() {
   toggleButtonState(inputList, buttonElement, settings)
 }
 
+function addNewCard(cardData, prepend = true) {
+  const cardEl = getCardEl(cardData)
+  if (prepend) {
+    cardsList.prepend(cardEl)
+  } else {
+    cardsList.append(cardEl)
+  }
+}
+
 function handleNewPostSubmit(evt) {
   evt.preventDefault()
+  const submitButton = evt.submitter
+  setButtonText(submitButton, true, 'Create', 'Saving...')
+
   const inputValues = getNewPostValues()
-  const cardEl = getCardEl(inputValues)
-  cardsList.prepend(cardEl)
-  resetNewPostForm()
-  closeModal(newPostModal)
+  api
+    .addNewCard(inputValues)
+    .then((cardData) => {
+      addNewCard(cardData)
+      resetNewPostForm()
+      closeModal(newPostModal)
+    })
+    .catch(console.error)
+    .finally(() => {
+      setButtonText(submitButton, false, 'Create', 'Saving...')
+    })
+}
+
+function handleAvatarSubmit(evt) {
+  evt.preventDefault()
+  const submitButton = evt.submitter
+  setButtonText(submitButton, true)
+
+  api
+    .editAvatarInfo(avatarInput.value)
+    .then((data) => {
+      const avatarImg = document.querySelector('.profile__avatar')
+      if (data && data.avatar) {
+        avatarImg.src = data.avatar
+        closeModal(avatarModal)
+      } else {
+        alert('Failed to update avatar. Please try again.')
+      }
+    })
+    .catch(console.error)
+    .finally(() => {
+      setButtonText(submitButton, false)
+    })
 }
 
 newPostForm.addEventListener('submit', handleNewPostSubmit)
 editProfileForm.addEventListener('submit', handleEditProfileSubmit)
 
-function renderCard(item) {
-  const cardEl = getCardEl(item)
-  cardsList.append(cardEl)
-}
+avatarModalBtn.addEventListener('click', () => {
+  openModal(avatarModal)
+})
 
-initialCards.forEach(renderCard)
+avatarForm.addEventListener('submit', handleAvatarSubmit)
 
 enableValidation(settings)
