@@ -80,6 +80,7 @@ const avatarInput = avatarModal.querySelector('#profile-avatar-input')
 
 const profileNameEl = document.querySelector('.profile__name')
 const profileDescriptionEl = document.querySelector('.profile__description')
+const avatarImg = document.querySelector('.profile__avatar')
 
 // Delete modal elements
 const deleteModal = document.querySelector('#delete-modal')
@@ -110,7 +111,6 @@ api
       cardsList.append(cardEl)
     })
 
-    const avatarImg = document.querySelector('.profile__avatar')
     avatarImg.src = userInfo.avatar
     profileNameEl.textContent = userInfo.name
     profileDescriptionEl.textContent = userInfo.about
@@ -142,6 +142,7 @@ function resetProfileForm() {
 function handleEditProfileSubmit(evt) {
   evt.preventDefault()
   const submitButton = evt.submitter
+  submitButton.disabled = true
   setButtonText(submitButton, true)
   api
     .editUserInfo({
@@ -156,6 +157,7 @@ function handleEditProfileSubmit(evt) {
     .catch(console.error)
     .finally(() => {
       setButtonText(submitButton, false)
+      submitButton.disabled = false // Let validation logic take over
     })
 }
 
@@ -227,6 +229,7 @@ function getCardEl(data) {
 function handleDeleteSubmit(evt) {
   evt.preventDefault()
   const submitButton = evt.submitter
+  submitButton.disabled = true
   setButtonText(submitButton, true, 'Delete', 'Deleting...')
   api
     .deleteCard(selectedCardId)
@@ -239,6 +242,7 @@ function handleDeleteSubmit(evt) {
     .catch(console.error)
     .finally(() => {
       setButtonText(submitButton, false, 'Delete', 'Deleting...')
+      submitButton.disabled = false
     })
 }
 
@@ -297,6 +301,8 @@ newPostBtn.addEventListener('click', handlePostModalOpen)
 editProfileModal.addEventListener('mousedown', closeModalOnOverlayClick)
 newPostModal.addEventListener('mousedown', closeModalOnOverlayClick)
 previewModal.addEventListener('mousedown', closeModalOnOverlayClick)
+avatarModal.addEventListener('mousedown', closeModalOnOverlayClick)
+deleteModal.addEventListener('mousedown', closeModalOnOverlayClick)
 
 const closeButtons = document.querySelectorAll('.modal__close-btn')
 closeButtons.forEach((button) => {
@@ -332,6 +338,7 @@ function addNewCard(cardData, prepend = true) {
 function handleNewPostSubmit(evt) {
   evt.preventDefault()
   const submitButton = evt.submitter
+  submitButton.disabled = true
   setButtonText(submitButton, true, 'Create', 'Saving...')
 
   const inputValues = getNewPostValues()
@@ -345,18 +352,19 @@ function handleNewPostSubmit(evt) {
     .catch(console.error)
     .finally(() => {
       setButtonText(submitButton, false, 'Create', 'Saving...')
+      submitButton.disabled = false
     })
 }
 
 function handleAvatarSubmit(evt) {
   evt.preventDefault()
   const submitButton = evt.submitter
+  submitButton.disabled = true
   setButtonText(submitButton, true)
 
   api
     .editAvatarInfo(avatarInput.value)
     .then((data) => {
-      const avatarImg = document.querySelector('.profile__avatar')
       if (data && data.avatar) {
         avatarImg.src = data.avatar
         closeModal(avatarModal)
@@ -367,6 +375,7 @@ function handleAvatarSubmit(evt) {
     .catch(console.error)
     .finally(() => {
       setButtonText(submitButton, false)
+      submitButton.disabled = false
     })
 }
 

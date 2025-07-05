@@ -4,11 +4,5 @@ export function setButtonText(
   defaultText = 'Save',
   loadingText = 'Saving...',
 ) {
-  if (isLoading) {
-    btn.setAttribute('disabled', 'true')
-    btn.textContent = loadingText
-  } else {
-    btn.removeAttribute('disabled')
-    btn.textContent = defaultText
-  }
+  btn.textContent = isLoading ? loadingText : defaultText
 }

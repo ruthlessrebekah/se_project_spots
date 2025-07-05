@@ -72,19 +72,21 @@
       <footer class="footer">
         <p class="footer__text">2025 &copy; Rebekah Crockatt</p>
       </footer>
-      <div class="modal" id="edit-profile-modal">
+      <div class="modal modal_type_edit_profile" id="edit-profile-modal">
         <div class="modal__container">
-          <button
-            type="button"
-            class="modal__close-btn"
-            aria-label="Close modal"
-          >
-            <img
-              src="<%=require('./images/x-icon.svg')%>"
-              alt="Close button icon"
-            />
-          </button>
-          <h2 class="modal__title">Edit profile</h2>
+          <div class="modal__header">
+            <button
+              type="button"
+              class="modal__close-btn"
+              aria-label="Close modal"
+            >
+              <img
+                src="<%=require('./images/x-icon.svg')%>"
+                alt="Close button icon"
+              />
+            </button>
+            <h2 class="modal__title">Edit profile</h2>
+          </div>
           <form class="modal__form" id="edit-profile-form" novalidate>
             <label for="profile-name-input" class="modal__label">
               Name
@@ -126,19 +128,21 @@
           </form>
         </div>
       </div>
-      <div class="modal" id="new-post-modal">
+      <div class="modal modal_type_new_post" id="new-post-modal">
         <div class="modal__container">
-          <button
-            type="button"
-            class="modal__close-btn"
-            aria-label="Close modal"
-          >
-            <img
-              src="<%=require('./images/x-icon.svg')%>"
-              alt="Close button icon"
-            />
-          </button>
-          <h2 class="modal__title">New post</h2>
+          <div class="modal__header">
+            <button
+              type="button"
+              class="modal__close-btn"
+              aria-label="Close modal"
+            >
+              <img
+                src="<%=require('./images/x-icon.svg')%>"
+                alt="Close button icon"
+              />
+            </button>
+            <h2 class="modal__title">New post</h2>
+          </div>
           <form class="modal__form" id="new-post-form" novalidate>
             <label for="card-image-input" class="modal__label">
               Image link
@@ -192,18 +196,24 @@
         <p class="modal__caption"></p>
       </div>
     </div>
-    <div class="modal" id="avatar-modal">
+    <div class="modal modal_type_avatar" id="avatar-modal">
       <div class="modal__container">
-        <button type="button" class="modal__close-btn" aria-label="Close modal">
-          <img
-            src="<%=require('./images/x-icon.svg')%>"
-            alt="Close button icon"
-          />
-        </button>
-        <h2 class="modal__title">Edit avatar</h2>
+        <div class="modal__header">
+          <button
+            type="button"
+            class="modal__close-btn"
+            aria-label="Close modal"
+          >
+            <img
+              src="<%=require('./images/x-icon.svg')%>"
+              alt="Close button icon"
+            />
+          </button>
+          <h2 class="modal__title">Edit profile avatar</h2>
+        </div>
         <form class="modal__form" id="edit-avatar-form" novalidate>
           <label for="profile-avatar-input" class="modal__label">
-            Avatar
+            Profile picture
             <input
               type="url"
               class="modal__input"
