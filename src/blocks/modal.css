@@ -340,7 +340,6 @@
 
 @media screen and (max-width: 480px) {
   .modal_type_avatar .modal__container {
-    position: relative;
     width: 300px;
     height: 222px;
     min-width: 300px;
@@ -384,7 +383,7 @@
 
   .modal_type_avatar .modal__header {
     margin-bottom: 12px;
-    position: absolute;
+    /* position: absolute; */
   }
 
   .modal__title {
